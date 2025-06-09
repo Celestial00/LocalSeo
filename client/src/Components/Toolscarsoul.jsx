@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const toolsData = [
   {
@@ -97,30 +97,44 @@ const toolsData = [
     ],
   },
 ];
-
 export default function ToolsCarousel() {
   const [startIndex, setStartIndex] = useState(0);
   const [direction, setDirection] = useState("right");
+  const [isMobile, setIsMobile] = useState(false);
+
+  const pageSize = 6;
+  const totalPages = Math.ceil(toolsData.length / pageSize);
+  const currentPage = Math.floor(startIndex / pageSize);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleNext = () => {
-    if (startIndex + 6 < toolsData.length) {
-      setDirection("right");
-      setStartIndex(startIndex + 6);
-    }
+    setDirection("right");
+    setStartIndex((prev) => (prev + pageSize) % toolsData.length);
   };
 
   const handlePrev = () => {
-    if (startIndex - 6 >= 0) {
-      setDirection("left");
-      setStartIndex(startIndex - 6);
-    }
+    setDirection("left");
+    setStartIndex((prev) =>
+      (prev - pageSize + toolsData.length) % toolsData.length
+    );
   };
 
-  const visibleTools = toolsData.slice(startIndex, startIndex + 6);
+  const handleDotClick = (pageIndex) => {
+    setDirection(pageIndex > currentPage ? "right" : "left");
+    setStartIndex(pageIndex * pageSize);
+  };
+
+  const visibleTools = toolsData.slice(startIndex, startIndex + pageSize);
 
   return (
     <section
-      className="bg-[#f7f7f7] py-16 px-4 sm:px-6"
+      className="bg-[#f7f7f7]   py-16 px-4 sm:px-6"
       style={{ fontFamily: "'Poppins', sans-serif" }}
     >
       <div className="max-w-7xl mx-auto">
@@ -128,52 +142,69 @@ export default function ToolsCarousel() {
           Top 10+ Game-Changing Features
         </h2>
 
-        <div className="relative px-4 sm:px-8">
-  {/* Arrows */}
-  <button
-    onClick={handlePrev}
-    className="absolute left-2 sm:-left-8 top-1/2 transform -translate-y-1/2 bg-white border rounded-full shadow-md p-3 z-10 hover:bg-gray-100"
-    disabled={startIndex === 0}
-  >
-    <ChevronLeft className="h-6 w-6 text-gray-700" />
-  </button>
+        <div className="relative z-1 px-4 sm:px-8">
+          {/* Arrows only on Desktop */}
+          {!isMobile && (
+            <>
+              <button
+                onClick={handlePrev}
+                className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100 z-10"
+              >
+                <ChevronLeft className="w-5 h-5  " />
+              </button>
+              <button
+                onClick={handleNext}
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100 z-10"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </>
+          )}
 
-  <button
-    onClick={handleNext}
-    className="absolute right-2 sm:-right-8 top-1/2 transform -translate-y-1/2 bg-white border rounded-full shadow-md p-3 z-10 hover:bg-gray-100"
-    disabled={startIndex + 6 >= toolsData.length}
-  >
-    <ChevronRight className="h-6 w-6 text-gray-700" />
-  </button>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={startIndex}
+              initial={{ opacity: 0, x: direction === "right" ? 100 : -100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: direction === "right" ? -100 : 100 }}
+              transition={{ duration: 0.4 }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+            >
+              {visibleTools.map((tool, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 border border-gray-200 hover:shadow-xl transition-all h-full"
+                >
+                  <h3 className="text-lg font-semibold text-[#00D4ff] mb-3">
+                    {tool.title}
+                  </h3>
+                  <ul className="text-sm text-gray-700 space-y-2 list-none pl-0">
+                    {tool.features.map((feature, i) => (
+                      <li key={i}>{feature}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
 
-  {/* Carousel */}
-  <AnimatePresence mode="wait">
-    <motion.div
-      key={startIndex}
-      initial={{ opacity: 0, x: direction === "right" ? 100 : -100 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: direction === "right" ? -100 : 100 }}
-      transition={{ duration: 0.4 }}
-      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
-    >
-      {visibleTools.map((tool, index) => (
-        <div
-          key={index}
-          className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 border border-gray-200 hover:shadow-xl transition-all h-full"
-        >
-          <h3 className="text-lg font-semibold text-[#00D4ff] mb-3">
-            {tool.title}
-          </h3>
-          <ul className="text-sm text-gray-700 space-y-2 list-none pl-0">
-            {tool.features.map((feature, i) => (
-              <li key={i}>{feature}</li>
-            ))}
-          </ul>
+          {/* Dots only on Mobile */}
+          {isMobile && (
+            <div className="flex justify-center mt-8 space-x-2">
+              {Array.from({ length: totalPages }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleDotClick(i)}
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    currentPage === i
+                      ? "bg-gray-800"
+                      : "bg-gray-400 hover:bg-gray-600"
+                  }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
-      ))}
-    </motion.div>
-  </AnimatePresence>
-</div>
       </div>
     </section>
   );

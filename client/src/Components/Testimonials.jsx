@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -20,6 +20,14 @@ const testimonials = [
 export default function TestimonialsCarousel() {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState("right");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleNext = () => {
     if (index < testimonials.length - 1) {
@@ -38,20 +46,35 @@ export default function TestimonialsCarousel() {
   const testimonial = testimonials[index];
 
   return (
-    <section className="bg-white py-20 px-4 sm:px-6 font-poppins">
+    <section className="bg-white [font-family:'Poppins',sans-serif] py-20 px-4 sm:px-6 font-poppins">
       <div className="max-w-3xl mx-auto text-center text-black">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-12">💬 What Our Customers Say</h2>
+        <h2 className="text-3xl sm:text-4xl font-bold mb-12">
+          💬 What Our Customers Say
+        </h2>
 
         <div className="relative flex items-center justify-center">
-          {/* Left Arrow */}
-          <button
-            onClick={handlePrev}
-            className="absolute -left-12 sm:-left-16 top-1/2 -translate-y-1/2 bg-amber-100 hover:bg-amber-200 p-3 rounded-full shadow z-10 transition disabled:opacity-30"
-            disabled={index === 0}
-            aria-label="Previous Testimonial"
-          >
-            <ChevronLeft className="w-5 h-5 text-black" />
-          </button>
+          {/* Arrows only on desktop */}
+          {!isMobile && (
+            <>
+              <button
+                onClick={handlePrev}
+                className="absolute -left-12 sm:-left-16 top-1/2 -translate-y-1/2 bg-amber-100 hover:bg-amber-200 p-3 rounded-full shadow z-10 transition disabled:opacity-30"
+                disabled={index === 0}
+                aria-label="Previous Testimonial"
+              >
+                <ChevronLeft className="w-5 h-5 text-black" />
+              </button>
+
+              <button
+                onClick={handleNext}
+                className="absolute -right-12 sm:-right-16 top-1/2 -translate-y-1/2 bg-amber-100 hover:bg-amber-200 p-3 rounded-full shadow z-10 transition disabled:opacity-30"
+                disabled={index === testimonials.length - 1}
+                aria-label="Next Testimonial"
+              >
+                <ChevronRight className="w-5 h-5 text-black" />
+              </button>
+            </>
+          )}
 
           {/* Animated Testimonial Box */}
           <div className="w-full px-2">
@@ -69,31 +92,23 @@ export default function TestimonialsCarousel() {
               </motion.div>
             </AnimatePresence>
           </div>
-
-          {/* Right Arrow */}
-          <button
-            onClick={handleNext}
-            className="absolute -right-12 sm:-right-16 top-1/2 -translate-y-1/2 bg-amber-100 hover:bg-amber-200 p-3 rounded-full shadow z-10 transition disabled:opacity-30"
-            disabled={index === testimonials.length - 1}
-            aria-label="Next Testimonial"
-          >
-            <ChevronRight className="w-5 h-5 text-black" />
-          </button>
         </div>
 
-        {/* Indicator Dots */}
-        <div className="mt-6 flex justify-center gap-2">
-          {testimonials.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setIndex(i)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                i === index ? "bg-black" : "bg-gray-300"
-              }`}
-              aria-label={`Go to testimonial ${i + 1}`}
-            ></button>
-          ))}
-        </div>
+        {/* Dots only on mobile */}
+        {isMobile && (
+          <div className="mt-6 flex justify-center gap-2">
+            {testimonials.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setIndex(i)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  i === index ? "bg-black" : "bg-gray-300"
+                }`}
+                aria-label={`Go to testimonial ${i + 1}`}
+              ></button>
+            ))}
+          </div>
+        )}
 
         <p className="mt-10 text-black/60 text-sm sm:text-base">
           🛡️ Verified reviews from real users. Used by over 5,000+ businesses worldwide.

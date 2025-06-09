@@ -19,7 +19,7 @@ export default function FAQSection() {
   ];
 
   return (
-    <section className="bg-gradient-to-br from-cyan-400 to-blue-600 py-20 px-4 sm:px-6 font-poppins text-white">
+    <section className="bg-gradient-to-br from-cyan-400 to-blue-600 py-20 px-4 [font-family:'Poppins',sans-serif] sm:px-6 font-poppins text-white">
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-3xl sm:text-4xl font-bold mb-12"> FAQs</h2>
 

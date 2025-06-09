@@ -1,6 +1,6 @@
 export default function ComparisonSection() {
   return (
-    <section className="bg-gradient-to-br from-cyan-400 to-blue-600 text-black py-20 px-4 sm:px-6" style={{ fontFamily: "'Poppins', sans-serif" }}>
+    <section className="bg-gradient-to-br from-cyan-400 to-blue-600  text-black py-20 px-4 sm:px-6" style={{ fontFamily: "'Poppins', sans-serif" }}>
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl sm:text-4xl font-bold text-center mb-10">
           📊 Compare Us to Other Tools

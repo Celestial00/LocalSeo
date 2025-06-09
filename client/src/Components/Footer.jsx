@@ -1,5 +1,6 @@
 import { FaInstagram, FaFacebookF, FaTwitter, FaYoutube } from "react-icons/fa";
-import logo from '../assets/Logo.png'
+import logo from "../assets/Logo.png";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
@@ -9,12 +10,11 @@ export default function Footer() {
         <div className="col-span-2">
           <div className="flex items-center space-x-3 mb-4">
             <div className="w-10 h-10  rounded-full flex items-center justify-center">
-  <img src={logo} className="w-14 h-14" />
+              <img src={logo} className="w-14 h-14" />
               {/* Placeholder for Logo */}
             </div>
             <p className="text-white font-semibold leading-snug">
-             GDP tools for Seo optimization
-              
+              GDP tools for Seo optimization
             </p>
           </div>
           <div className="flex space-x-4 mt-4 text-lg text-white/80">
@@ -29,39 +29,31 @@ export default function Footer() {
         <div>
           <ul className="space-y-2">
             <li>
-              <a href="#" className="hover:underline">
+              <Link to="/blog" className="hover:underline">
                 Blog
-              </a>
+              </Link>
             </li>
-            <li>
-              <a href="#" className="hover:underline">
-                FAQs
-              </a>
-            </li>
+          
             <li>
               <a href="#" className="hover:underline">
                 Contact
               </a>
             </li>
-            <li>
-              <a href="#" className="hover:underline">
-                Log in
-              </a>
-            </li>
+           
           </ul>
         </div>
 
         <div>
           <ul className="space-y-2">
             <li>
-              <a href="#" className="hover:underline">
+              <Link to="/privacy" className="hover:underline">
                 Privacy Policy
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="hover:underline">
+              <Link to="/terms" className="hover:underline">
                 Terms of Use
-              </a>
+              </Link>
             </li>
             <li>
               <a href="#" className="hover:underline">
@@ -70,8 +62,6 @@ export default function Footer() {
             </li>
           </ul>
         </div>
-
-        
 
         {/* Email Sign-up */}
         <div>

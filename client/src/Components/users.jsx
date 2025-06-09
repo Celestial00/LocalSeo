@@ -11,7 +11,7 @@ export default function GrowthHeroesGrid() {
   ];
 
   return (
-    <section className="white py-20 px-4 sm:px-6 font-poppins text-black">
+    <section className="white py-20 px-4 sm:px-6 [font-family:'Poppins',sans-serif] font-poppins text-black">
       <div className="max-w-6xl mx-auto text-center">
         <h2 className="text-3xl sm:text-4xl font-bold mb-12">
           🛠️ Built for Every Local Growth Hero

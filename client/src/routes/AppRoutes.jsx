@@ -1,25 +1,35 @@
 import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
+
 import MainLayout from "../layouts/MainLayout";
+import AuthLayout from "../layouts/AuthLayout"; // 🔹 New import
 import PrivateRoute from "../Components/PrivateRoute";
+
 import Register from "../Pages/Register.jsx";
 import PrivacyPolicy from "../Pages/PrivacyPage.jsx";
 import TermsOfService from "../Pages/Terms.jsx";
+import PricingPage from "../Pages/Pricing.jsx";
+import FeaturesPage from "../Pages/Features.jsx";
+import BlogPage from "../Pages/BlogContainer.jsx";
+import BlogDetails from "../Pages/BlogPage.jsx";
+import InputQueryPage from "../Pages/InputQueryPage.jsx";
+import AuthRedirect from "../Utils/AuthRedirect.jsx";
 
-// Lazy-loaded pages
 const Home = lazy(() => import("../Pages/Home.jsx"));
 const About = lazy(() => import("../Pages/About.jsx"));
-// const Dashboard = lazy(() => import('../pages/Dashboard'));
 const Login = lazy(() => import("../Pages/Login.jsx"));
 
 export default function AppRoutes() {
   return (
     <Suspense
       fallback={
-        <div role="status">
+        <div
+          className="flex items-center justify-center h-screen"
+          role="status"
+        >
           <svg
             aria-hidden="true"
-            class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+            className="w-16 h-16 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -33,31 +43,43 @@ export default function AppRoutes() {
               fill="currentFill"
             />
           </svg>
-          <span class="sr-only">Loading...</span>
+          <span className="sr-only">Loading...</span>
         </div>
       }
     >
       <Routes>
-        {/* Public layout and pages */}
+        {/* 🔹 Public Layout with Navbar and Footer */}
         <Route element={<MainLayout />}>
-          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
           <Route path="/Privacy" element={<PrivacyPolicy />} />
           <Route path="/Terms" element={<TermsOfService />} />
+          <Route path="/Price" element={<PricingPage />} />
+          <Route path="/Features" element={<FeaturesPage />} />
+          <Route path="/Blog" element={<BlogPage />} />
+          <Route path="/BlogPost/:id" element={<BlogDetails />} />
+          <Route path="/ToolPage" element={<InputQueryPage />} />
+        </Route>
+
+        <Route element={<AuthLayout />}>
+          <Route
+            path="/"
+            element={
+              <AuthRedirect>
+                <Login />
+              </AuthRedirect>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <AuthRedirect>
+                <Register />
+              </AuthRedirect>
+            }
+          />
         </Route>
       </Routes>
     </Suspense>
   );
 }
-
-//  {/* Protected Route */}
-//           <Route
-//             path="/dashboard"
-//             element={
-//               <PrivateRoute>
-//                 <Dashboard />
-//               </PrivateRoute>
-//             }
-//           />

@@ -1,6 +1,6 @@
 export default function FinalCTA() {
   return (
-    <section className="bg-white py-20 px-4 sm:px-6 text-black font-poppins">
+    <section className="bg-white py-20 [font-family:'Poppins',sans-serif] px-4 sm:px-6  text-black font-poppins">
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-3xl sm:text-4xl font-bold mb-4">
           Ready to Skyrocket Your Google Business Profile?

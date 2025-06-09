@@ -1,11 +1,20 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaEnvelope, FaFlag, FaLock } from "react-icons/fa";
+import Select from "react-select";
+import { getNames } from "country-list";
+import RegisterImg from "../Assets/images/Somewhere_img.png";
+import axios from "axios";
+
+const countryOptions = getNames().map((country) => ({
+  value: country,
+  label: country,
+}));
 
 const Register = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: "",
+    username: "",
     email: "",
     country: "",
     password: "",
@@ -13,7 +22,7 @@ const Register = () => {
   });
 
   const handleNavigate = () => {
-    navigate("/login");
+    navigate("/");
   };
 
   const handleChange = (e) => {
@@ -24,46 +33,51 @@ const Register = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleCountryChange = (selectedOption) => {
+    setFormData((prev) => ({
+      ...prev,
+      country: selectedOption.value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    navigate("/login");
+    const res = await axios.post("http://localhost:5000/api/users/register", {
+      username: formData.username,
+      email: formData.email,
+      country: formData.country,
+      password: formData.password,
+    });
+
   };
 
   return (
-    <div className="w-full h-screen flex flex-col md:flex-row">
+    <div className="w-full h-screen flex flex-col md:flex-row [font-family:'Poppins',sans-serif]">
       {/* Left Panel */}
-      <div className="w-full md:w-[45%] h-[30%] md:h-full bg-gradient-to-br from-cyan-400 to-blue-600 flex flex-col justify-center items-center p-6 text-white">
-        <h1 className="text-3xl md:text-4xl font-bold mb-2 text-center">Hello, Friend!</h1>
-        <p className="text-center max-w-[80%] mb-6 text-sm md:text-base leading-relaxed">
-          Enter your personal details and start your journey with us
-        </p>
-        <button
-          onClick={handleNavigate}
-          className="border border-white px-6 py-2 rounded-full font-semibold hover:bg-white hover:bg-opacity-10 transition"
-        >
-          Sign In
-        </button>
+      <div className="w-full md:w-[45%] h-[30%] md:h-full bg-gradient-to-br from-cyan-400 to-blue-600 flex justify-center items-center p-6">
+        <img
+          src={RegisterImg}
+          alt="Welcome"
+          className="w-90 md:w-96 lg:w-[500px] xl:w-[700px] object-contain"
+        />
       </div>
 
       {/* Right Panel */}
       <div className="w-full md:w-[55%] h-[70%] md:h-full bg-white flex flex-col justify-center items-center p-6">
-        <h2 className="text-2xl md:text-3xl text-blue-600 font-bold mb-6">Create Account</h2>
-        <form
-          onSubmit={handleSubmit}
-          className="w-full max-w-md flex flex-col gap-4"
-        >
-          {/* Input Field Template */}
+        <h2 className="text-2xl md:text-3xl text-blue-600 font-bold mb-6">
+          Create Account
+        </h2>
+        <div className="w-full max-w-md flex flex-col gap-4">
           <div className="relative">
             <FaUser className="absolute top-1/2 left-3 transform -translate-y-1/2 text-blue-500" />
             <input
               type="text"
-              name="name"
+              name="username"
               placeholder="Full Name"
-              value={formData.name}
+              value={formData.username}
               onChange={handleChange}
               required
-              className="pl-10 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="pl-10 pr-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
@@ -76,24 +90,36 @@ const Register = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="pl-10 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="pl-10 pr-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
-          <div className="relative">
-            <FaFlag className="absolute top-1/2 left-3 transform -translate-y-1/2 text-blue-500" />
-            <input
-              type="text"
-              name="country"
-              placeholder="Country"
-              value={formData.country}
-              onChange={handleChange}
-              required
-              className="pl-10 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
+          <div className="relative border border-gray-300 rounded-md focus:ring-blue-400 ">
+            <FaFlag className="absolute top-1/2 left-3 transform -translate-y-1/2 text-blue-500 z-10" />
+            <div className="pl-10">
+              <Select
+                cl
+                styles={{
+                  control: (provided, state) => ({
+                    ...provided,
+                    border: "none", // Remove border
+                    boxShadow: "none", // Remove box shadow on focus
+                    "&:hover": {
+                      border: "none", // Ensure no border on hover
+                    },
+                  }),
+                }}
+                options={countryOptions}
+                value={countryOptions.find(
+                  (option) => option.value === formData.country
+                )}
+                onChange={handleCountryChange}
+                placeholder="Select Country"
+              />
+            </div>
           </div>
 
-          <div className="relative">
+          <div className="relative ">
             <FaLock className="absolute top-1/2 left-3 transform -translate-y-1/2 text-blue-500" />
             <input
               type="password"
@@ -102,7 +128,7 @@ const Register = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="pl-10 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="pl-10 pr-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
@@ -115,17 +141,25 @@ const Register = () => {
               value={formData.confirm_password}
               onChange={handleChange}
               required
-              className="pl-10 pr-4 py-2 border rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="pl-10 pr-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
 
           <button
-            type="submit"
+            onClick={handleSubmit}
             className="w-full bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 transition"
           >
             Sign Up
           </button>
-        </form>
+
+          <button
+            type="button"
+            onClick={handleNavigate}
+            className="w-full cursor-pointer bg-white border border-gray-300 text-black py-3 rounded-md font-semibold text-lg transition duration-300 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-400 hover:text-amber-50"
+          >
+            Already have an Account? Login
+          </button>
+        </div>
       </div>
     </div>
   );

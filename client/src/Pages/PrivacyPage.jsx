@@ -1,6 +1,6 @@
 export default function PrivacyPolicy() {
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-800 px-10 py-30 font-[Poppins]">
+    <div className="min-h-screen bg-gray-100 text-gray-800 px-10 py-10 font-[Poppins]">
       <div className="bg-white p-10 rounded-none shadow-none border border-gray-200">
         <h1 className="text-5xl font-extrabold mb-2 text-blue-600">Privacy Policy</h1>
         <p className="text-sm text-gray-500 mb-8">

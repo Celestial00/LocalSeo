@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 exports.registerUser = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, country, password } = req.body;
 
   try {
     let user = await User.findOne({ email });
@@ -16,19 +16,14 @@ exports.registerUser = async (req, res) => {
 
     user = new User({
       username,
+      country,
       email,
       password: hashedPassword,
     });
 
     await user.save();
 
-    const payload = { user: { id: user.id } };
-
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-
-    res.status(201).json({ token });
+    res.status(200).json({ response: "success" });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
@@ -51,7 +46,7 @@ exports.loginUser = async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.json({ token });
+    res.json({ Token: token, Plan: user.plan });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");

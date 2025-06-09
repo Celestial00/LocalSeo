@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import LoginImg from "../Assets/images/Log_img.png";
+import axios from "axios";
+import cookieHolder from "../Controllers/Auth.Controller";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -8,6 +11,8 @@ const Login = () => {
     email: "",
     password: "",
   });
+
+  
 
   const handleNavigate = () => {
     navigate("/register");
@@ -21,28 +26,38 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    navigate("/tools/home");
+
+    var Check = false;
+    const res = await axios.post("http://localhost:5000/api/users/login", {
+      email: formData.email,
+      password: formData.password,
+    });
+
+    Check = cookieHolder(res);
+
+    if (Check === true) {
+      navigate("/home");
+    }
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen w-full">
+    <div
+      className="flex flex-col md:flex-row h-screen w-full"
+      style={{ fontFamily: "'Poppins', sans-serif" }}
+    >
       {/* Left Panel */}
       <div className="w-full md:w-[45%] h-[30%] md:h-full bg-gradient-to-br from-cyan-400 to-blue-600 flex flex-col justify-center items-center p-8">
-        <h1 className="text-white font-bold text-3xl md:text-4xl text-center mb-4">
+        <h1 className="text-white font-bold text-3xl md:text-4xl text-center mb-6">
           Welcome Back!
         </h1>
-        <p className="text-white text-opacity-90 text-center mb-6 max-w-[80%] text-sm md:text-base leading-relaxed">
-          To keep connected with us please login with your personal info
-        </p>
-        <button
-          onClick={handleNavigate}
-          className="border border-white text-white px-6 py-2 rounded-full font-semibold hover:bg-white hover:bg-opacity-10 transition"
-        >
-          Sign Up
-        </button>
+
+        <img
+          src={LoginImg}
+          alt="Welcome Visual"
+          className="w-44 sm:w-32 md:w-48 lg:w-64 xl:w-130 rounded-lg"
+        />
       </div>
 
       {/* Right Panel */}
@@ -51,10 +66,7 @@ const Login = () => {
           Sign In to Your Account
         </h2>
 
-        <form
-          onSubmit={handleSubmit}
-          className="w-full max-w-md flex flex-col gap-6"
-        >
+        <div className="w-full max-w-md flex flex-col gap-6">
           <div className="relative">
             <span className="absolute inset-y-0 left-3 flex items-center text-blue-500">
               <FaEnvelope />
@@ -86,12 +98,19 @@ const Login = () => {
           </div>
 
           <button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md font-semibold text-lg transition"
+            onClick={handleSubmit}
+            className="w-full cursor-pointer bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md font-semibold text-lg transition"
           >
             Sign In
           </button>
-        </form>
+
+          <button
+            onClick={handleNavigate}
+            className="w-full cursor-pointer bg-white border border-gray-300 text-black py-3 rounded-md font-semibold text-lg transition duration-300 hover:bg-gradient-to-r hover:from-blue-600 hover:to-cyan-400 hover:text-amber-50"
+          >
+            Register
+          </button>
+        </div>
       </div>
     </div>
   );
