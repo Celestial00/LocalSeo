@@ -1,23 +1,25 @@
 import { useEffect, useState } from "react";
 import { ChevronDown, Cookie, LogOut, Menu, X } from "lucide-react";
-import userImg from "../assets/def.png"; // Replace with your actual avatar image
-import logo from "../assets/Logo.png";
+import userImg from "../assets/images/def.png"; // Replace with your actual avatar image
+import logo from "../assets/images/Logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { AiPostgenerator } from "../Controllers/Freemium.tools.Controller";
 import Cookies from "js-cookie";
+
 import { useModal } from "../Contexts/ModelContext";
-useModal
+useModal;
 
 export default function Navbar() {
   const [showTools, setShowTools] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileFreeOpen, setMobileFreeOpen] = useState(false);
+  const [mobilePremiumOpen, setMobilePremiumOpen] = useState(false);
   const [isLogedIn, setisLogedIn] = useState(() => {
     return !!Cookies.get("user");
   });
   const navigate = useNavigate();
   const { openModal } = useModal();
-
 
   const FreeTools = [
     "AI Post Generator",
@@ -90,9 +92,7 @@ export default function Navbar() {
           <li className=" font-light hover:text-amber-600 [font-family:'Poppins',sans-serif] cursor-pointer">
             <Link to="/home"> Home </Link>
           </li>
-          <li className=" font-light hover:text-amber-600 [font-family:'Poppins',sans-serif] cursor-pointer">
-            SEO Tips
-          </li>
+
           <li className=" font-light hover:text-amber-600 [font-family:'Poppins',sans-serif] cursor-pointer">
             <Link to="/Features"> Features </Link>
           </li>
@@ -171,13 +171,13 @@ export default function Navbar() {
             {showUserMenu && (
               <div className="absolute right-0 inset-shadow-2xs mt-2 w-48 bg-white text-black rounded-md ring-1 ring-gray-200 z-50 flex flex-col justify-between h-48">
                 <div>
-                  <div className="px-4 py-2 font-light cursor-pointer [font-family:'Poppins',sans-serif]">
+                  <div className="px-4 py-2 font-light cursor-pointer hover:bg-gray-200 [font-family:'Poppins',sans-serif]">
                     Profile
                   </div>
-                  <div className="px-4 py-2 font-light cursor-pointer [font-family:'Poppins',sans-serif]">
+                  <div className="px-4 py-2 font-light cursor-pointer hover:bg-gray-200 [font-family:'Poppins',sans-serif]">
                     Settings
                   </div>
-                  <div className="px-4 py-2 font-light cursor-pointer [font-family:'Poppins',sans-serif]">
+                  <div className="px-4 py-2 font-light cursor-pointer hover:bg-gray-200 [font-family:'Poppins',sans-serif]">
                     Placeholder
                   </div>
                 </div>
@@ -213,23 +213,74 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="absolute top-26 left-0 w-full bg-white text-black flex flex-col gap-4 px-6 py-4 md:hidden z-50">
           <div className="hover:text-amber-600 [font-family:'Poppins',sans-serif] cursor-pointer">
-            <Link to="/"> Home </Link>
-          </div>
-          <div className="hover:text-amber-600 [font-family:'Poppins',sans-serif] cursor-pointer">
-            SEO Tips
-          </div>
-          <div className="hover:text-amber-600 [font-family:'Poppins',sans-serif] cursor-pointer">
-            <Link to="/features"> Home </Link>
-          </div>
-          <div className="hover:text-amber-600 [font-family:'Poppins',sans-serif] cursor-pointer">
-            <Link to="/price"> Home </Link>
+            <Link to="/home"> Home </Link>
           </div>
 
           <div className="hover:text-amber-600 [font-family:'Poppins',sans-serif] cursor-pointer">
-            Tool 1
+            <Link to="/features"> Features </Link>
           </div>
           <div className="hover:text-amber-600 [font-family:'Poppins',sans-serif] cursor-pointer">
-            Tool 2
+            <Link to="/blog"> Blog </Link>
+          </div>
+          <div className="hover:text-amber-600 [font-family:'Poppins',sans-serif] cursor-pointer">
+            <Link to="/price"> Price </Link>
+          </div>
+          <div className="hover:text-amber-600 [font-family:'Poppins',sans-serif] cursor-pointer">
+            <Link to="/about"> About us </Link>
+          </div>
+
+          <div>
+            <button
+              onClick={() => setMobileFreeOpen(!mobileFreeOpen)}
+              className="flex items-center justify-between w-full font-light [font-family:'Poppins',sans-serif] hover:text-amber-600"
+            >
+              Free Tools{" "}
+              <ChevronDown
+                size={16}
+                className={`transition-transform ${
+                  mobileFreeOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+            {mobileFreeOpen && (
+              <ul className="mt-2 ml-4 space-y-1">
+                {FreeTools.map((tool, index) => (
+                  <li
+                    key={`mobile-free-${index}`}
+                    onClick={() => HandleTool(tool)}
+                    className="text-sm px-2 py-1 font-light cursor-pointer hover:text-amber-600 [font-family:'Poppins',sans-serif]"
+                  >
+                    {tool}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <div>
+            <button
+              onClick={() => setMobilePremiumOpen(!mobilePremiumOpen)}
+              className="flex items-center justify-between w-full font-light [font-family:'Poppins',sans-serif] hover:text-amber-600"
+            >
+              Premium Tools{" "}
+              <ChevronDown
+                size={16}
+                className={`transition-transform ${
+                  mobilePremiumOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+            {mobilePremiumOpen && (
+              <ul className="mt-2 ml-4 space-y-1">
+                {PremiumTools.map((tool, index) => (
+                  <li
+                    key={`mobile-premium-${index}`}
+                    className="text-sm px-2 py-1 font-light cursor-pointer hover:text-amber-600 [font-family:'Poppins',sans-serif]"
+                  >
+                    {tool}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
           <div className="hover:text-amber-600 [font-family:'Poppins',sans-serif] cursor-pointer">
             Placeholder

@@ -8,8 +8,10 @@ exports.registerUser = async (req, res) => {
   const { username, email, country, password } = req.body;
 
   try {
-    let user = await User.findOne({ email });
-    if (user) return res.status(400).json({ msg: "User already exists" });
+    const LowerCaseEmail = email.toLowerCase();
+
+    let user = await User.findOne({ email: LowerCaseEmail  });
+    if (user) return res.status(409).json({ msg: "User already exists" });
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -17,7 +19,7 @@ exports.registerUser = async (req, res) => {
     user = new User({
       username,
       country,
-      email,
+      email: LowerCaseEmail,
       password: hashedPassword,
     });
 
@@ -32,13 +34,14 @@ exports.registerUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
+  const LowerCaseEmail = email.toLowerCase();
 
   try {
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ msg: "Invalid credentials" });
+    const user = await User.findOne({ email:LowerCaseEmail });
+    if (!user) return res.status(404).json({ msg: "User Not Found!" });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
+    if (!isMatch) return res.status(401).json({ msg: "Invalid credentials" });
 
     const payload = { user: { id: user.id } };
 

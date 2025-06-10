@@ -102,7 +102,7 @@ export default function ToolsCarousel() {
   const [direction, setDirection] = useState("right");
   const [isMobile, setIsMobile] = useState(false);
 
-  const pageSize = 6;
+  const pageSize = 5;
   const totalPages = Math.ceil(toolsData.length / pageSize);
   const currentPage = Math.floor(startIndex / pageSize);
 
@@ -142,19 +142,19 @@ export default function ToolsCarousel() {
           Top 10+ Game-Changing Features
         </h2>
 
-        <div className="relative z-1 px-4 sm:px-8">
+        <div className="relative z-1 px-10 sm:px-8">
           {/* Arrows only on Desktop */}
           {!isMobile && (
             <>
               <button
                 onClick={handlePrev}
-                className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100 z-10"
+                className="absolute left-[-60px] top-1/2 transform -translate-y-1/2 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100 z-10"
               >
                 <ChevronLeft className="w-5 h-5  " />
               </button>
               <button
                 onClick={handleNext}
-                className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100 z-10"
+                className="absolute right-[-60px] top-1/2 transform -translate-y-1/2 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100 z-10"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>

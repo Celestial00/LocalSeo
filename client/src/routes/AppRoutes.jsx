@@ -3,7 +3,6 @@ import { lazy, Suspense } from "react";
 
 import MainLayout from "../layouts/MainLayout";
 import AuthLayout from "../layouts/AuthLayout"; // 🔹 New import
-import PrivateRoute from "../Components/PrivateRoute";
 
 import Register from "../Pages/Register.jsx";
 import PrivacyPolicy from "../Pages/PrivacyPage.jsx";
