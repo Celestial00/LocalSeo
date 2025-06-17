@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { ChevronDown, Cookie, LogOut, Menu, X } from "lucide-react";
 import userImg from "../assets/images/def.png"; // Replace with your actual avatar image
 import logo from "../assets/images/Logo.png";
@@ -20,6 +20,12 @@ export default function Navbar() {
   });
   const navigate = useNavigate();
   const { openModal } = useModal();
+
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [prevSearches, setPrevSearches] = useState([]);
+
+  const searchRef = useRef();
 
   const FreeTools = [
     "AI Post Generator",
@@ -57,6 +63,32 @@ export default function Navbar() {
     "Full GBP + Social Integration",
   ];
 
+  const allTools = [...FreeTools, ...PremiumTools];
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setSearchOpen(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
+
+  const handleSearchSelect = (tool) => {
+    setSearchQuery(tool);
+    setPrevSearches((prev) =>
+      [tool, ...prev.filter((t) => t !== tool)].slice(0, 5)
+    );
+    HandleTool(tool);
+    setSearchOpen(false);
+  };
+
+  const filteredTools = searchQuery
+    ? allTools.filter((t) =>
+        t.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : allTools;
+
   useEffect(() => {
     if (Cookies.get("user")) {
       setisLogedIn(true);
@@ -81,7 +113,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white sticky top-0 text-black px-6 py-4  flex items-center shadow-lg z-10  justify-between w-full">
+    <nav className="bg-white sticky top-0 text-black px-6 py-4  flex items-center shadow-lg z-10  justify-between     w-full">
       {/* Left Section - Logo & Desktop Menu */}
       <div className="flex items-center gap-10">
         <div className="text-2xl [font-family:'Poppins',sans-serif] font-bold">
@@ -159,54 +191,123 @@ export default function Navbar() {
           </li>
         </ul>
       </div>
+      <div className="flex [font-family:'Poppins',sans-serif]  items-center  justify-center gap-5 ">
+        <div ref={searchRef} className="relative z-30">
+          <input
+            type="text"
+            onFocus={() => {
+              setSearchOpen(true);
+              setShowUserMenu(false);
+            }}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search for your favorite tools"
+            className=" max-sm:w-50 lg:w-120  px-4 py-2 mb-1.9 border border-gray-400 rounded-md focus:outline-none shadow-sm"
+          />
 
-      {/* Right Section - Avatar */}
-      <div className="flex items-center gap-4">
-        {isLogedIn ? (
-          <div className="relative hidden md:block">
-            <button onClick={() => setShowUserMenu(!showUserMenu)}>
-              <img src={userImg} alt="User" className="w-8 h-8 rounded-full" />
-            </button>
+          {searchOpen && (
+            <>
+              {/* Grayed out background */}
+              <div
+                className="fixed inset-0 bg-black opacity-20 z-10"
+                onClick={() => setSearchOpen(false)}
+              />
 
-            {showUserMenu && (
-              <div className="absolute right-0 inset-shadow-2xs mt-2 w-48 bg-white text-black rounded-md ring-1 ring-gray-200 z-50 flex flex-col justify-between h-48">
-                <div>
-                  <div className="px-4 py-2 font-light cursor-pointer hover:bg-gray-200 [font-family:'Poppins',sans-serif]">
-                    Profile
-                  </div>
-                  <div className="px-4 py-2 font-light cursor-pointer hover:bg-gray-200 [font-family:'Poppins',sans-serif]">
-                    Settings
-                  </div>
-                  <div className="px-4 py-2 font-light cursor-pointer hover:bg-gray-200 [font-family:'Poppins',sans-serif]">
-                    Placeholder
-                  </div>
+              {/* Dropdown */}
+              <div className="absolute mt-2 max-sm:w-50 lg:w-120 bg-white rounded-md shadow-lg z-20 p-4">
+                {prevSearches.length > 0 && (
+                  <>
+                    <h4 className="text-xs font-medium text-gray-500 mb-2">
+                      Previous Searches
+                    </h4>
+                    <div className="space-y-1 mb-3">
+                      {prevSearches.map((t, i) => (
+                        <div
+                          key={`prev-${i}`}
+                          className="py-1 px-2 hover:text-amber-600 cursor-pointer rounded hover:bg-gray-100"
+                          onClick={() => handleSearchSelect(t)}
+                        >
+                          {t}
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+                <h4 className="text-xs font-medium text-gray-500 mb-2">
+                  Tools
+                </h4>
+                <div className="max-h-40 overflow-y-auto space-y-1">
+                  {filteredTools.length > 0 ? (
+                    filteredTools.map((t, i) => (
+                      <div
+                        key={`match-${i}`}
+                        className="py-1 px-2 hover:text-amber-600 cursor-pointer rounded hover:bg-gray-100"
+                        onClick={() => handleSearchSelect(t)}
+                      >
+                        {t}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="py-1 text-gray-500">No matches</div>
+                  )}
                 </div>
-                <button
-                  onClick={handleLogout}
-                  className="w-full flex items-center gap-2 px-4 py-2 bg-amber-600 text-white cursor-pointer [font-family:'Poppins',sans-serif] rounded-b-md"
-                >
-                  <LogOut size={16} /> Logout
-                </button>
               </div>
-            )}
-          </div>
-        ) : (
-          <button
-            onClick={handleLogin} // Define your login logic or redirect
-            className="bg-blue-600 text-white cursor-pointer px-4 py-2 rounded-md hidden md:block [font-family:'Poppins',sans-serif]"
-          >
-            Login
-          </button>
-        )}
+            </>
+          )}
+        </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden "
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Toggle mobile menu"
-        >
-          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Right Section - Avatar */}
+        <div className="flex items-center gap-4">
+          {isLogedIn ? (
+            <div className="relative hidden md:block">
+              <button onClick={() => setShowUserMenu(!showUserMenu)}>
+                <img
+                  src={userImg}
+                  alt="User"
+                  className="w-8 h-8 rounded-full"
+                />
+              </button>
+
+              {showUserMenu && (
+                <div className="absolute right-0 inset-shadow-2xs mt-2 w-48 bg-white text-black rounded-md ring-1 ring-gray-200 z-50 flex flex-col justify-between h-48">
+                  <div>
+                    <div className="px-4 py-2 font-light cursor-pointer hover:bg-gray-200 [font-family:'Poppins',sans-serif]">
+                      Profile
+                    </div>
+                    <div className="px-4 py-2 font-light cursor-pointer hover:bg-gray-200 [font-family:'Poppins',sans-serif]">
+                      Settings
+                    </div>
+                    <div className="px-4 py-2 font-light cursor-pointer hover:bg-gray-200 [font-family:'Poppins',sans-serif]">
+                      Placeholder
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-2 px-4 py-2 bg-amber-600 text-white cursor-pointer [font-family:'Poppins',sans-serif] rounded-b-md"
+                  >
+                    <LogOut size={16} /> Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={handleLogin} // Define your login logic or redirect
+              className="bg-blue-600 text-white cursor-pointer px-4 py-2 rounded-md hidden md:block [font-family:'Poppins',sans-serif]"
+            >
+              Login
+            </button>
+          )}
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden "
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle mobile menu"
+          >
+            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu Dropdown */}

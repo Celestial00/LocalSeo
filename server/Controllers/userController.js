@@ -4,13 +4,15 @@ const jwt = require("jsonwebtoken");
 
 require("dotenv").config();
 
+
+//register
+
 exports.registerUser = async (req, res) => {
   const { username, email, country, password } = req.body;
+  const lowerEmail = email.toLowerCase();
 
   try {
-    const LowerCaseEmail = email.toLowerCase();
-
-    let user = await User.findOne({ email: LowerCaseEmail  });
+    let user = await User.findOne({ email: lowerEmail });
     if (user) return res.status(409).json({ msg: "User already exists" });
 
     const salt = await bcrypt.genSalt(10);
@@ -19,7 +21,7 @@ exports.registerUser = async (req, res) => {
     user = new User({
       username,
       country,
-      email: LowerCaseEmail,
+      email: lowerEmail,
       password: hashedPassword,
     });
 
@@ -32,12 +34,15 @@ exports.registerUser = async (req, res) => {
   }
 };
 
+
+//Login 
+
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
-  const LowerCaseEmail = email.toLowerCase();
+  const lowerEmail = email.toLowerCase();
 
   try {
-    const user = await User.findOne({ email:LowerCaseEmail });
+    const user = await User.findOne({ email: lowerEmail });
     if (!user) return res.status(404).json({ msg: "User Not Found!" });
 
     const isMatch = await bcrypt.compare(password, user.password);
