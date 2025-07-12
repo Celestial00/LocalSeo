@@ -17,12 +17,15 @@ export default function Modal({ title, description, onClose }) {
           Close
         </button>
 
-     <Link to='/register' >  <button
-          onClick={onClose}
-          className="mt-2 mr-3 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Register
-        </button></Link>
+        <Link to="/register">
+          {" "}
+          <button
+            onClick={onClose}
+            className="mt-2 mr-3 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Register
+          </button>
+        </Link>
       </div>
     </div>
   );

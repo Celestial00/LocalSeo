@@ -13,6 +13,10 @@ import BlogPage from "../Pages/BlogContainer.jsx";
 import BlogDetails from "../Pages/BlogPage.jsx";
 import InputQueryPage from "../Pages/InputQueryPage.jsx";
 import AuthRedirect from "../Utils/AuthRedirect.jsx";
+import ReviewPage from "../Pages/ReviewToolPage.jsx";
+import SerpPage from "../Pages/SerpPage.jsx";
+import SaplingPage from "../Pages/SaplingPage.jsx";
+import RankingPage from "../Pages/RankingPage.jsx";
 
 const Home = lazy(() => import("../Pages/Home.jsx"));
 const About = lazy(() => import("../Pages/About.jsx"));
@@ -49,7 +53,7 @@ export default function AppRoutes() {
       <Routes>
         {/* 🔹 Public Layout with Navbar and Footer */}
         <Route element={<MainLayout />}>
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/Privacy" element={<PrivacyPolicy />} />
           <Route path="/Terms" element={<TermsOfService />} />
@@ -58,11 +62,15 @@ export default function AppRoutes() {
           <Route path="/Blog" element={<BlogPage />} />
           <Route path="/BlogPost/:id" element={<BlogDetails />} />
           <Route path="/ToolPage" element={<InputQueryPage />} />
+          <Route path="/ReviewToolPage" element={<ReviewPage />} />
+          <Route path="/SerpToolPage" element={<SerpPage />} />
+          <Route path="/SaplingToolPage" element={<SaplingPage />} />
+          <Route path="/RankingPage" element={<RankingPage />} />
         </Route>
 
         <Route element={<AuthLayout />}>
           <Route
-            path="/"
+            path="/login"
             element={
               <AuthRedirect>
                 <Login />

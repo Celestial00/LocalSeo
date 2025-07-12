@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 
 const AuthRedirect = ({ children }) => {
   const user = Cookies.get("user");
-  return user ? <Navigate to="/home" /> : children;
+  return user ? <Navigate to="/" /> : children;
 };
 
 export default AuthRedirect;

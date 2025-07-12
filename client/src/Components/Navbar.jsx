@@ -3,7 +3,7 @@ import { ChevronDown, Cookie, LogOut, Menu, X } from "lucide-react";
 import userImg from "../assets/images/def.png"; // Replace with your actual avatar image
 import logo from "../assets/images/Logo.png";
 import { Link, useNavigate } from "react-router-dom";
-import { AiPostgenerator } from "../Controllers/Freemium.tools.Controller";
+// import { AiPostgenerator } from "../Controllers/Freemium.tools.Controller";
 import Cookies from "js-cookie";
 
 import { useModal } from "../Contexts/ModelContext";
@@ -97,14 +97,18 @@ export default function Navbar() {
 
   const HandleTool = (Name) => {
     if (!!isLogedIn) {
-      AiPostgenerator(Name);
+      if (Name === "AI Post Generator" || Name === "Review Reply Templates") {
+        navigate("/ReviewToolPage");
+      } else if (Name === "Keyword Suggestions Tool") {
+        navigate("/SerpToolPage");
+      }
     } else {
       openModal();
     }
   };
 
   const handleLogin = () => {
-    navigate("/");
+    navigate("/login");
   };
 
   const handleLogout = () => {
@@ -122,7 +126,7 @@ export default function Navbar() {
 
         <ul className="hidden md:flex gap-6 text-sm font-semibold">
           <li className=" font-light hover:text-amber-600 [font-family:'Poppins',sans-serif] cursor-pointer">
-            <Link to="/home"> Home </Link>
+            <Link to="/"> Home </Link>
           </li>
 
           <li className=" font-light hover:text-amber-600 [font-family:'Poppins',sans-serif] cursor-pointer">
@@ -292,7 +296,7 @@ export default function Navbar() {
             </div>
           ) : (
             <button
-              onClick={handleLogin} // Define your login logic or redirect
+              onClick={handleLogin}
               className="bg-blue-600 text-white cursor-pointer px-4 py-2 rounded-md hidden md:block [font-family:'Poppins',sans-serif]"
             >
               Login
@@ -314,7 +318,7 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="absolute top-26 left-0 w-full bg-white text-black flex flex-col gap-4 px-6 py-4 md:hidden z-50">
           <div className="hover:text-amber-600 [font-family:'Poppins',sans-serif] cursor-pointer">
-            <Link to="/home"> Home </Link>
+            <Link to="/"> Home </Link>
           </div>
 
           <div className="hover:text-amber-600 [font-family:'Poppins',sans-serif] cursor-pointer">
@@ -382,9 +386,6 @@ export default function Navbar() {
                 ))}
               </ul>
             )}
-          </div>
-          <div className="hover:text-amber-600 [font-family:'Poppins',sans-serif] cursor-pointer">
-            Placeholder
           </div>
 
           {isLogedIn === true ? (

@@ -1,6 +1,7 @@
 const express = require("express");
 const connectDB = require("./config/db");
 const userRoutes = require("./Routes/userRoutes");
+const toolRoutes = require("./Routes/ToolRoute");
 const logger = require("./Middleware/logger");
 const ApiLimiter = require("./Middleware/ApiLimiter");
 require("dotenv").config();
@@ -16,6 +17,7 @@ app.use(ApiLimiter);
 
 //Routes
 app.use("/api/users", userRoutes);
+app.use("/api/tools", toolRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, "0.0.0.0", () =>

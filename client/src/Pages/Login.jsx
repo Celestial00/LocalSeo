@@ -44,7 +44,7 @@ const Login = () => {
 
       if (res.status === 200 || res.status === 201) {
         cookieHolder(res);
-        navigate("/home");
+        navigate("/");
       }
     } catch (error) {
       if (error.response) {

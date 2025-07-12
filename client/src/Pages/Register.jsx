@@ -28,7 +28,7 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleNavigate = () => {
-    navigate("/");
+    navigate("/login");
   };
 
   const handleChange = (e) => {
@@ -63,7 +63,7 @@ const Register = () => {
         password: formData.password,
       });
 
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       if (error.response) {
         const status = error.response.status;
@@ -166,43 +166,43 @@ const Register = () => {
                 />
               </div>
             </div>
-  <div className="relative">
-        <FaLock className="absolute top-1/2 left-3 transform -translate-y-1/2 text-blue-500" />
-        <input
-          type={showPassword ? "text" : "password"}
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          className="pl-10 pr-10 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-        <div
-          className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 cursor-pointer"
-          onClick={() => setShowPassword((prev) => !prev)}
-        >
-          {showPassword ? <FaEyeSlash /> : <FaEye />}
-        </div>
-      </div>
+            <div className="relative">
+              <FaLock className="absolute top-1/2 left-3 transform -translate-y-1/2 text-blue-500" />
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                className="pl-10 pr-10 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+              <div
+                className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </div>
+            </div>
 
-      <div className="relative mt-4">
-        <FaLock className="absolute top-1/2 left-3 transform -translate-y-1/2 text-blue-500" />
-        <input
-          type={showConfirmPassword ? "text" : "password"}
-          name="confirm_password"
-          placeholder="Confirm Password"
-          value={formData.confirm_password}
-          onChange={handleChange}
-          required
-          className="pl-10 pr-10 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-        <div
-          className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 cursor-pointer"
-          onClick={() => setShowConfirmPassword((prev) => !prev)}
-        >
-          {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-        </div>
-      </div>
+            <div className="relative mt-4">
+              <FaLock className="absolute top-1/2 left-3 transform -translate-y-1/2 text-blue-500" />
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirm_password"
+                placeholder="Confirm Password"
+                value={formData.confirm_password}
+                onChange={handleChange}
+                required
+                className="pl-10 pr-10 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+              <div
+                className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+                onClick={() => setShowConfirmPassword((prev) => !prev)}
+              >
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+              </div>
+            </div>
             <button
               onClick={handleSubmit}
               className="w-full bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 transition"
