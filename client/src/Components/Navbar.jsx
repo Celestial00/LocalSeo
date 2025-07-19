@@ -30,7 +30,7 @@ export default function Navbar() {
   const FreeTools = [
     "AI Post Generator",
 
-    "Review Reply Templates",
+    "Reviewing Reply Templates",
 
     "Citation Scan",
 
@@ -39,6 +39,8 @@ export default function Navbar() {
     "Keyword Suggestions Tool",
 
     "AI Humanizer",
+
+    "Live Keyword Rank Tracker",
   ];
 
   const PremiumTools = [
@@ -49,8 +51,6 @@ export default function Navbar() {
     "Auto Google Posts + Social Media Scheduler",
 
     "Auto Review Reply Generator",
-
-    "Live Keyword Rank Tracker",
 
     "AI to Human Content Converter",
 
@@ -97,10 +97,24 @@ export default function Navbar() {
 
   const HandleTool = (Name) => {
     if (!!isLogedIn) {
-      if (Name === "AI Post Generator" || Name === "Review Reply Templates") {
-        navigate("/ReviewToolPage");
+      if (Name === "AI Post Generator") {
+        navigate("/ReviewToolPage", { state: { tool: "Ai Post Generator" } });
+      }
+
+      if (Name === "Reviewing Reply Templates") {
+        navigate("/ReviewToolPage", {
+          state: { tool: "Reviewing Reply Templates" },
+        });
       } else if (Name === "Keyword Suggestions Tool") {
         navigate("/SerpToolPage");
+      } else if (Name === "Keyword Suggestions Tool") {
+        navigate("/SerpToolPage");
+      } else if (Name === "AI Humanizer") {
+        navigate("/SaplingToolPage");
+      } else if (Name === "Review Reply Templates") {
+        navigate("/ReviewToolPage");
+      } else if (Name === "Live Keyword Rank Tracker") {
+        navigate("/RankingPage");
       }
     } else {
       openModal();

@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa"; // Install with: npm install react-icons
 import { getTool, AllTools } from "../Controllers/Freemium.tools.Controller";
+import { useLocation } from "react-router-dom";
 
 const ReviewPage = () => {
   const [input, setInput] = useState("");
   const [apiResponse, setApiResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const location = useLocation();
+  const { tool } = location.state || {}; // fallback to {} if no state
+
 
   const sendForReview = async () => {
     if (!input.trim()) return;
@@ -29,7 +34,7 @@ const ReviewPage = () => {
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Header */}
         <h1 className="text-4xl font-bold text-blue-600 mb-2 text-center">
-          Submit for Custom AI Post Generator OR For Reviewing Reply Templates
+          {tool}
         </h1>
 
         {/* Output or Loader */}
