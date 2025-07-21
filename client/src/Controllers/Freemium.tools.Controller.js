@@ -87,7 +87,7 @@ export const AllTools = {
   SaplingRewrite: {
     name: "Sapling AI Rewrite",
     run: async (text) => {
-      const saplingApiKey = "ZQUQ3RFP0A5FAJTOWW050OXBC282A9B7"; // your actual key
+      const saplingApiKey = import.meta.env.VITE_SAP_API_KEY;
       const url = "https://api.sapling.ai/api/v1/rephrase";
 
       try {
@@ -95,12 +95,12 @@ export const AllTools = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${saplingApiKey}`, // ✅ Correct: use variable in template string
+            Authorization: `Bearer ${saplingApiKey}`,
           },
           body: JSON.stringify({
             text,
-            key: saplingApiKey, // ✅ Correct: use variable, not bare string
-            session_id: "rewrite-session-001", // optional
+            key: saplingApiKey,
+            session_id: "rewrite-session-001",
           }),
         });
 
@@ -125,7 +125,6 @@ export const AllTools = {
   },
 };
 
-// Run tool by name
 export const getTool = async (toolName, input) => {
   const tool = Object.values(AllTools).find((t) => t.name === toolName);
 

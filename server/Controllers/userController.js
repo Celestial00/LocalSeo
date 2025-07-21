@@ -1,9 +1,9 @@
 const User = require("../Models/UserModel");
+const OauthModel = require("../Models/OauthSchema");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 require("dotenv").config();
-
 
 //register
 
@@ -34,8 +34,7 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-
-//Login 
+//Login
 
 exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -60,3 +59,5 @@ exports.loginUser = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
+
+

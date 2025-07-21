@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { ChevronDown, Cookie, LogOut, Menu, X } from "lucide-react";
+import { ChevronDown, Cookie, Hand, LogOut, Menu, X } from "lucide-react";
 import userImg from "../assets/images/def.png"; // Replace with your actual avatar image
 import logo from "../assets/images/Logo.png";
 import { Link, useNavigate } from "react-router-dom";
@@ -28,42 +28,52 @@ export default function Navbar() {
   const searchRef = useRef();
 
   const FreeTools = [
-    "AI Post Generator",
+    { name: "AI Post Generator", isAvailable: true, uri: "ReviewToolPage" },
+    {
+      name: "Reviewing Reply Templates",
+      isAvailable: true,
+      uri: "ReviewToolPage",
+    },
+    { name: "Citation Scan", isAvailable: false, uri: "" },
 
-    "Reviewing Reply Templates",
-
-    "Citation Scan",
-
-    "GBP Audit",
-
-    "Keyword Suggestions Tool",
-
-    "AI Humanizer",
-
-    "Live Keyword Rank Tracker",
+    {
+      name: "Keyword Suggestions Tool",
+      isAvailable: true,
+      uri: "SerpToolPage",
+    },
+    {
+      name: "Live Keyword Rank Tracker",
+      isAvailable: true,
+      uri: "RankingPage",
+    },
   ];
 
   const PremiumTools = [
-    "AI-Based GBP Optimization Assistant",
-
-    "Auto Citation Checker, Builder & Syncer",
-
-    "Auto Google Posts + Social Media Scheduler",
-
-    "Auto Review Reply Generator",
-
-    "AI to Human Content Converter",
-
-    "Digital Business Card Builder",
-
-    "High-Intent Keyword Finder",
-
-    "All-in-One SEO Toolkit",
-
-    "Full GBP + Social Integration",
+    {
+      name: "AI-Based GBP Optimization Assistant",
+      isAvailable: false,
+      uri: "",
+    },
+    {
+      name: "Auto Citation Checker, Builder & Syncer",
+      isAvailable: false,
+      uri: "",
+    },
+    { name: "GBP Audit", isAvailable: false, uri: "" },
+    {
+      name: "Auto Google Posts + Social Media Scheduler",
+      isAvailable: false,
+      uri: "",
+    },
+    { name: "Digital Business Card Builder", isAvailable: false, uri: "" },
+    { name: "AI Humanizer", isAvailable: true, uri: "SaplingToolPage" },
+    { name: "Full GBP + Social Integration", isAvailable: false, uri: "" },
   ];
 
   const allTools = [...FreeTools, ...PremiumTools];
+
+  const toolNames = allTools.map((tool) => tool.name);
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (searchRef.current && !searchRef.current.contains(e.target)) {
@@ -84,10 +94,10 @@ export default function Navbar() {
   };
 
   const filteredTools = searchQuery
-    ? allTools.filter((t) =>
+    ? toolNames.filter((t) =>
         t.toLowerCase().includes(searchQuery.toLowerCase())
       )
-    : allTools;
+    : toolNames;
 
   useEffect(() => {
     if (Cookies.get("user")) {
@@ -95,27 +105,40 @@ export default function Navbar() {
     }
   }, [isLogedIn]);
 
-  const HandleTool = (Name) => {
+  const HandleProTool = (Name) => {
     if (!!isLogedIn) {
-      if (Name === "AI Post Generator") {
-        navigate("/ReviewToolPage", { state: { tool: "Ai Post Generator" } });
-      }
+      PremiumTools.forEach((i) => {
+        if (Name === i.name) {
+          if (i.isAvailable) {
+            navigate(`/${i.uri}`);
+          } else {
+            navigate("/ToolComingSoon");
+          }
+        }
+      });
+    } else {
+      openModal();
+    }
+  };
 
-      if (Name === "Reviewing Reply Templates") {
-        navigate("/ReviewToolPage", {
-          state: { tool: "Reviewing Reply Templates" },
-        });
-      } else if (Name === "Keyword Suggestions Tool") {
-        navigate("/SerpToolPage");
-      } else if (Name === "Keyword Suggestions Tool") {
-        navigate("/SerpToolPage");
-      } else if (Name === "AI Humanizer") {
-        navigate("/SaplingToolPage");
-      } else if (Name === "Review Reply Templates") {
-        navigate("/ReviewToolPage");
-      } else if (Name === "Live Keyword Rank Tracker") {
-        navigate("/RankingPage");
-      }
+  const HandleFreeTool = (Name) => {
+    if (!!isLogedIn) {
+      FreeTools.forEach((i) => {
+        if (Name === i.name) {
+          if (i.isAvailable) {
+            navigate(`/${i.uri}`, {
+              state: {
+                tool:
+                  i.name === "Reviewing Reply Templates"
+                    ? "Reviewing Reply Templates"
+                    : "Ai Post Generator",
+              },
+            });
+          } else {
+            navigate("/ToolComingSoon");
+          }
+        }
+      });
     } else {
       openModal();
     }
@@ -165,12 +188,12 @@ export default function Navbar() {
                     {FreeTools.map((tool, index) => (
                       <li
                         onClick={() => {
-                          HandleTool(tool);
+                          HandleFreeTool(tool.name);
                         }}
                         key={`free-${index}`}
                         className="px-2 py-1 hover:text-amber-600 [font-family:'Poppins',sans-serif] font-light cursor-pointer"
                       >
-                        {tool}
+                        {tool.name}
                       </li>
                     ))}
                   </ul>
@@ -184,10 +207,11 @@ export default function Navbar() {
                   <ul className="space-y-1">
                     {PremiumTools.map((tool, index) => (
                       <li
+                        onClick={() => HandleProTool(tool.name)}
                         key={`premium-${index}`}
                         className="px-2 py-1 hover:text-amber-600 [font-family:'Poppins',sans-serif] font-light cursor-pointer"
                       >
-                        {tool}
+                        {tool.name}
                       </li>
                     ))}
                   </ul>

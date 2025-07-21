@@ -9,7 +9,7 @@ const ReviewPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const location = useLocation();
-  const { tool } = location.state || {}; // fallback to {} if no state
+  const { tool } = location.state || {};
 
 
   const sendForReview = async () => {
