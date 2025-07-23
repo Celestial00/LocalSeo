@@ -27,6 +27,8 @@ export default function Navbar() {
 
   const searchRef = useRef();
 
+  useEffect(() => {}, []);
+
   const FreeTools = [
     { name: "AI Post Generator", isAvailable: true, uri: "ReviewToolPage" },
     {
@@ -67,7 +69,6 @@ export default function Navbar() {
     },
     { name: "Digital Business Card Builder", isAvailable: false, uri: "" },
     { name: "AI Humanizer", isAvailable: true, uri: "SaplingToolPage" },
-    { name: "Full GBP + Social Integration", isAvailable: false, uri: "" },
   ];
 
   const allTools = [...FreeTools, ...PremiumTools];
@@ -100,10 +101,9 @@ export default function Navbar() {
     : toolNames;
 
   useEffect(() => {
-    if (Cookies.get("user")) {
-      setisLogedIn(true);
-    }
-  }, [isLogedIn]);
+    const user = Cookies.get("user");
+    setisLogedIn(!!user);
+  }, []);
 
   const HandleProTool = (Name) => {
     if (!!isLogedIn) {

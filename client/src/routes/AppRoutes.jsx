@@ -18,7 +18,8 @@ import SerpPage from "../Pages/SerpPage.jsx";
 import SaplingPage from "../Pages/SaplingPage.jsx";
 import RankingPage from "../Pages/RankingPage.jsx";
 import ToolComingSoon from "../Pages/ToolComingSoon.jsx";
-// import Check from "../Pages/check.jsx";
+import Check from "../Pages/check.jsx";
+import OauthCall from "../Pages/OauthCall.jsx";
 
 const Home = lazy(() => import("../Pages/Home.jsx"));
 const About = lazy(() => import("../Pages/About.jsx"));
@@ -69,7 +70,8 @@ export default function AppRoutes() {
           <Route path="/SaplingToolPage" element={<SaplingPage />} />
           <Route path="/RankingPage" element={<RankingPage />} />
           <Route path="/ToolComingSoon" element={<ToolComingSoon />} />
-          {/* <Route path="/check" element={<Check />} /> */}
+          <Route path="/check" element={<Check />} />
+          <Route path="/OauthCall" element={<OauthCall />} />
         </Route>
 
         <Route element={<AuthLayout />}>
