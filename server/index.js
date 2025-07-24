@@ -25,26 +25,36 @@ const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 app.post("/auth/google", async (req, res) => {
-  const { token } = req.body;
-
+  const { code } = req.body;
   try {
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
+    const tokenRes = await axios.post(
+      "https://oauth2.googleapis.com/token",
+      null,
+      {
+        params: {
+          client_id: process.env.GOOGLE_CLIENT_ID,
+          client_secret: process.env.GOOGLE_CLIENT_SECRET,
+          code,
+          grant_type: "authorization_code",
+          redirect_uri: "https://allinonegbptools.com/OauthCall",
+        },
+      }
+    );
+
+    const { access_token, refresh_token, id_token } = tokenRes.data;
+
+    const userInfo = await axios.get(
+      `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`
+    );
+
+    res.json({
+      access_token,
+
+      profile: userInfo.data,
     });
-
-    const { name, email, picture } = ticket.getPayload();
-
-    let user = await Oauth.findOne({ email });
-    if (!user) {
-      user = await Oauth.create({ name, email, picture });
-    }
-
-    res.json({ success: true, user });
-    
   } catch (err) {
-    console.error(err);
-    res.status(401).json({ success: false, error: "Invalid token" });
+    console.error("Token exchange failed:", err.response?.data || err.message);
+    res.status(400).json({ error: "OAuth exchange failed" });
   }
 });
 

@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 
 export default function OAuthCallback() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -13,7 +13,7 @@ export default function OAuthCallback() {
 
     if (code) {
       axios
-        .post("http://localhost:5000/auth/google", { code })
+        .post("https://allinonegbptools.com/auth/google", { code })
         .then((res) => {
           Cookies.set("user", res.data);
           navigate("/");
