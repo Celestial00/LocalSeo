@@ -33,13 +33,12 @@ export default function Footer() {
                 Blog
               </Link>
             </li>
-          
+
             <li>
-              <a href="#" className="hover:underline">
+              <Link to="/contact" className="hover:underline">
                 Contact
-              </a>
+              </Link>
             </li>
-           
           </ul>
         </div>
 
@@ -56,9 +55,7 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <a href="#" className="hover:underline">
-                Disclaimer
-              </a>
+            
             </li>
           </ul>
         </div>

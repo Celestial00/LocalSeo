@@ -6,14 +6,13 @@ import Cookies from "js-cookie";
 export default function OAuthCallback() {
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
 
     if (code) {
       axios
-        .post("https://allinonegbptools.com/auth/google", { code })
+        .post("http://localhost:5000/auth/google", { code })
         .then((res) => {
           Cookies.set("user", res.data);
           navigate("/");

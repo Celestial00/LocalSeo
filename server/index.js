@@ -36,7 +36,7 @@ app.post("/auth/google", async (req, res) => {
           client_secret: process.env.GOOGLE_CLIENT_SECRET,
           code,
           grant_type: "authorization_code",
-          redirect_uri: "https://allinonegbptools.com/OauthCall",
+          redirect_uri: "http://localhost:5173/OauthCall",
         },
       }
     );

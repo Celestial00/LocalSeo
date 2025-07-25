@@ -21,6 +21,9 @@ import ToolComingSoon from "../Pages/ToolComingSoon.jsx";
 import Check from "../Pages/check.jsx";
 import OauthCall from "../Pages/OauthCall.jsx";
 
+import ContactPage from "../Pages/Contact.jsx";
+import PlanPage from "../Pages/PlanPage.jsx";
+
 const Home = lazy(() => import("../Pages/Home.jsx"));
 const About = lazy(() => import("../Pages/About.jsx"));
 const Login = lazy(() => import("../Pages/Login.jsx"));
@@ -72,6 +75,8 @@ export default function AppRoutes() {
           <Route path="/ToolComingSoon" element={<ToolComingSoon />} />
           <Route path="/check" element={<Check />} />
           <Route path="/OauthCall" element={<OauthCall />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/PlanPage" element={<PlanPage />} />
         </Route>
 
         <Route element={<AuthLayout />}>
